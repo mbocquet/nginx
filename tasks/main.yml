@@ -19,6 +19,7 @@
     path: "{{ nginx_dhparam_file | default('/etc/ssl/dhparams.pem') }}"
     size: "{{ nginx_dhparam.bits | default(omit) }}"
   become: true
+  when: nginx_dhparam_file is defined
   tags:
     - nginx
     - ssl
@@ -91,6 +92,6 @@
         - vhost
         - link
 
-  # when:
-  #   - "'nginx.service' in services"
   become: true
+  when:
+    - "'nginx.service' in services"

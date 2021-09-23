@@ -2,10 +2,10 @@
 # defaults file for nginx
 
 # nginx_dhparam : parameters to construct nginx dhparam file
-nginx_dhparam:
-  path: /etc/ssl
-  name: dhparams
-  bits: 4096
+# nginx_dhparam:
+#   path: /etc/ssl
+#   name: dhparams
+#   bits: 4096
 
 # nginx_dhparam_file : here we use the previous parameters to set the dhparam
 # file path and name.
