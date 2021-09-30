@@ -1,0 +1,54 @@
+# {{ ansible_managed }}. role: {{ role_name }}, template: nginx-https-reverse-proxy.conf.j2
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
+server {
+    server_name {{ item.servername }};
+    listen 80;
+    listen [::]:80;
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    server_name {{ item.servername }};
+    listen {{ item.exposed_port }} ssl http2;
+    listen [::]:{{ item.exposed_port }} ssl http2;
+
+    ssl_certificate /etc/letsencrypt/live/{{ item.certname }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ item.certname }}/privkey.pem;
+    ssl_session_cache shared:le_nginx_SSL:1m;
+    ssl_session_timeout 1440m;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    # ssl_ciphers 'HIGH:!DHE';
+    ssl_dhparam {{ nginx_dhparam_file }};
+    # add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Robots-Tag none;
+    add_header X-Download-Options noopen;
+    add_header X-Permitted-Cross-Domain-Policies none;
+
+    location {{ item.url }} {
+        proxy_pass {{ item.protocol }}://{{ item.host }}:{{ item.port }};
+        proxy_redirect default;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forward-Ssl off;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+
+        # add_header Strict-Transport-Security "max-age=31536000" always;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-XSS-Protection "1; mode=block";
+        add_header X-Robots-Tag none;
+        add_header X-Download-Options noopen;
+        add_header X-Permitted-Cross-Domain-Policies none;
+    }
+}

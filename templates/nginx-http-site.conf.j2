@@ -1,0 +1,8 @@
+# {{ ansible_managed }}. role: {{ role_name }}, template: nginx-http-site.conf.j2
+
+server {
+    listen {{ item.exposed_port | default(80) }};
+    listen [::]:{{ item.exposed_port | default(80) }};
+    server_name {{ item.servername }};
+    root {{ item.web_root }};
+}

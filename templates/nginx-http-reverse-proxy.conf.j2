@@ -1,0 +1,12 @@
+# {{ ansible_managed }}. role: {{ role_name }}, template: nginx-http-reverse-proxy.conf.j2
+
+server {
+    listen {{ item.exposed_port }};
+    listen [::]:{{ item.exposed_port }};
+    server_name {{ item.servername }};
+    location {{ item.url }} {
+        proxy_pass {{ item.protocol }}://{{ item.host }}:{{ item.port }};
+        proxy_redirect default;
+        proxy_set_header Host $host;
+    }
+}
