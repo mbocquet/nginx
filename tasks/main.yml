@@ -1,8 +1,8 @@
 ---
 # tasks file for nginx
-- name: "package"
+- name: package
   package:
-    name: nginx
+    name: "{{ nginx_package | default('nginx') }}"
   become: true
   tags:
     - nginx
@@ -29,7 +29,7 @@
   block:
     - name: "vhost"
       template:
-        src: "nginx-{{ item.template | default('generic') }}.conf.j2"
+        src: "nginx-{{ item.template | default('http-site') }}.conf.j2"
         dest: "/etc/nginx/sites-available/{{ item.name }}"
         mode: 0644
       notify: reload nginx
@@ -86,7 +86,7 @@
       loop: "{{ nginx_sites }}"
       when:
         - item.enabled is defined
-        - item.enabled|lower in ['no', 'false']
+        - not item.enabled
       tags:
         - nginx
         - vhost
