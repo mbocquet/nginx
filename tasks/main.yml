@@ -14,9 +14,9 @@
     - nginx
     - facts
 
-- name: "openssl_dhparam"
+- name: openssl_dhparam
   openssl_dhparam:
-    path: "{{ nginx_dhparam_file | default('/etc/ssl/dhparams.pem') }}"
+    path: "{{ nginx_dhparam_file }}"
     size: "{{ nginx_dhparam.bits | default(omit) }}"
   become: true
   when: nginx_dhparam_file is defined
