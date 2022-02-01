@@ -1,0 +1,33 @@
+# {{ ansible_managed }}. role: {{ role_name }}, template: nginx-https-site.conf.j2
+
+server {
+    listen {{ item.exposed_port | default(80) }};
+    listen [::]:{{ item.exposed_port | default(80) }};
+    server_name {{ item.servername }};
+    root {{ item.web_root }};
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen {{ item.exposed_port | default(443) }} ssl http2;
+    listen [::]:{{ item.exposed_port | default(443) }} ssl http2;
+    server_name {{ item.servername }};
+    root {{ item.web_root }};
+
+    ssl_certificate /etc/letsencrypt/live/{{ item.certname }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ item.certname }}/privkey.pem;
+    ssl_session_cache shared:le_nginx_SSL:1m;
+    ssl_session_timeout 1440m;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    # ssl_ciphers 'HIGH:!DHE';
+    ssl_dhparam {{ nginx_dhparam_file }};
+    # add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Robots-Tag none;
+    add_header X-Download-Options noopen;
+    add_header X-Permitted-Cross-Domain-Policies none;
+}
