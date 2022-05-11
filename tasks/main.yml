@@ -29,7 +29,7 @@
   block:
     - name: "vhost"
       template:
-        src: "nginx-{{ item.template | default('http-site') }}.conf.j2"
+        src: "{{ item.template | default('nginx-http-site.conf.j2') }}"
         dest: "/etc/nginx/sites-available/{{ item.name }}"
         mode: 0644
       notify: reload nginx
