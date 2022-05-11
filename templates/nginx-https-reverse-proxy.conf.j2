@@ -35,7 +35,7 @@ server {
     add_header X-Permitted-Cross-Domain-Policies none;
 
     location {{ item.url }} {
-        proxy_pass {{ item.protocol | default('http') }}://{{ item.host }}:{{ item.port | default(80) }};
+        proxy_pass {{ item.protocol | default('http') }}://{{ item.host }}{% if item.port is defined %}:{{ item.port }}{% endif %};
         proxy_redirect default;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
