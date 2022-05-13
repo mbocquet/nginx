@@ -5,7 +5,7 @@ server {
     listen [::]:{{ item.exposed_port | default(80) }};
     server_name {{ item.servername }};
     location {{ item.url }} {
-        proxy_pass {{ item.protocol | default('http') }}://{{ item.host }}:{{ item.port | default(80) }};
+        proxy_pass {{ item.protocol | default('http') }}://{{ item.host }}{% if item.port is defined %}:{{ item.port }}{% endif %};
         proxy_redirect default;
         proxy_set_header Host $host;
     }
