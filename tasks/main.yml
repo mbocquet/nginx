@@ -58,7 +58,7 @@
 
     - name: "link presence"
       file:
-        src: "/etc/nginx/sites-available/{{ item.name }}"
+        src: "../sites-available/{{ item.name }}"
         path:
           "/etc/nginx/sites-enabled/{{ item.index |
           default('') }}{{ item.name }}"
