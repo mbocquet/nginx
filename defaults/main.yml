@@ -5,6 +5,14 @@
 # defaults to nginx if undefined.
 # nginx_package: 'nginx-full'
 
+# nginx_config_templates: files to drop into /etc/nginx/conf.d from templates.
+# See example template in templates folder
+# nginx_config_templates:
+#   - security.conf
+
+# nginx_server_tokens: example var used in nginx-security.conf.j2 template
+# nginx_server_tokens: "off"
+
 # nginx_dhparam : parameters to construct nginx dhparam file
 # nginx_dhparam:
 #   path: /etc/ssl
