@@ -46,7 +46,7 @@
 #     web_root: /var/www/example.org/html
 #     certname: www.example.org
 #     # nginx-example.org.conf.j2 should exist as nginx template somewhere
-#     template: example.org
+#     template: nginx-example.org.conf.j2
 #     # available and enabled are defaults so non mandatory
 #     # available: true
 #     # enabled: true
@@ -68,7 +68,7 @@
 #     exposed_port: 80
 #     port: 5000
 #     # nginx-myapp.conf.j2 should exist as nginx template somewhere
-#     template: myapp
+#     template: nginx-myapp.conf.j2
 #     available: true
 #     enabled: true
 #   # remove site file and link for myapp2
