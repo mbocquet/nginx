@@ -14,7 +14,8 @@
     - nginx
     - facts
 
-- import_tasks: configure.yml
+- name: configure
+  import_tasks: configure.yml
   when:
     - "'nginx.service' in services"
   tags:
