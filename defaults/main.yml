@@ -30,6 +30,9 @@
 # to use /etc/nginx/dhparams.pem :
 # nginx_dhparam_file: "/etc/nginx/{{ nginx_dhparam.name }}.pem"
 
+# nginx_backup_vhosts : boolean to backup previous vhost file(s). Defaults to omit / false
+# nginx_backup_vhosts: false
+
 # nginx_sites : dict variable to define sites
 #
 # nginx_sites:

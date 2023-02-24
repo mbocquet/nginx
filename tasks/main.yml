@@ -29,6 +29,7 @@
         src: "{{ item.template | default('nginx-http-site.conf.j2') }}"
         dest: "/etc/nginx/sites-available/{{ item.name }}"
         mode: 0644
+        backup: "{{ nginx_backup_vhosts | default(omit) }}"
       notify: reload nginx
       loop: "{{ nginx_sites }}"
       when:
