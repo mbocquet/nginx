@@ -4,7 +4,7 @@ server {
     listen {{ item.exposed_port | default(80) }};
     listen [::]:{{ item.exposed_port | default(80) }};
     server_name {{ item.servername }};
-    root {{ item.web_root }};
+    root {{ item.documentroot }};
     if ($scheme != "https") {
         return 301 https://$host$request_uri;
     }
@@ -14,7 +14,7 @@ server {
     listen {{ item.exposed_port | default(443) }} ssl http2;
     listen [::]:{{ item.exposed_port | default(443) }} ssl http2;
     server_name {{ item.servername }};
-    root {{ item.web_root }};
+    root {{ item.documentroot }};
 
     ssl_certificate /etc/letsencrypt/live/{{ item.certname }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ item.certname }}/privkey.pem;
