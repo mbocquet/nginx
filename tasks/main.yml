@@ -2,7 +2,7 @@
 # tasks file for nginx
 - name: package
   ansible.builtin.package:
-    name: "{{ nginx_package | default('nginx') }}"
+    name: "{{ nginx_packages | default('nginx') }}"
   become: true
   tags:
     - nginx

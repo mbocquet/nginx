@@ -1,9 +1,12 @@
 ---
 # defaults file for nginx
 
-# nginx_package : nginx flavour to install
+# nginx_packages : nginx packages to install
 # defaults to nginx if undefined.
-# nginx_package: 'nginx-full'
+# nginx_packages:
+#   - nginx-full
+#   - libnginx-mod-http-headers-more-filter
+#   - libnginx-mod-stream-geoip2
 
 # nginx_config_templates: files to drop into /etc/nginx/conf.d from templates.
 # See example template in templates folder
