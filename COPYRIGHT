@@ -1,6 +1,6 @@
 'nginx'. Ansible role to install and configure Nginx http server.
 
-Copyright © 2019-2022 Mathias Bocquet (mbocquet@sekoya.org)
+Copyright © 2019-2023 Mathias Bocquet (mbocquet@sekoya.org)
 
 This file is part of 'nginx' Ansible role.
 
