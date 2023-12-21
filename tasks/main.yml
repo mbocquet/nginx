@@ -12,6 +12,7 @@
   ansible.builtin.service_facts:
   tags:
     - nginx
+    - core
     - facts
 
 - name: configure
