@@ -1,6 +1,6 @@
 ---
 # tasks file for nginx
-- name: package
+- name: Package
   ansible.builtin.package:
     name: "{{ nginx_packages | default('nginx') }}"
   become: true
@@ -8,30 +8,33 @@
     - nginx
     - package
 
-- name: service_facts
+- name: Facts
   ansible.builtin.service_facts:
   tags:
     - nginx
     - core
     - facts
 
-- name: configure
-  import_tasks: configure.yml
+- name: Configure
+  ansible.builtin.import_tasks: configure.yml
   when:
     - "'nginx.service' in services"
   tags:
     - nginx
     - config
 
-- name: vhost
+- name: Sites
+  become: true
+  when:
+    - "'nginx.service' in services"
   block:
-    - name: "vhost"
+    - name: Template
       ansible.builtin.template:
         src: "{{ item.template | default('nginx-http-site.conf.j2') }}"
         dest: "/etc/nginx/sites-available/{{ item.name }}"
         mode: 0644
         backup: "{{ nginx_backup_vhosts | default(omit) }}"
-      notify: reload nginx
+      notify: Reload nginx
       loop: "{{ nginx_sites }}"
       when:
         - item.name != 'default'
@@ -42,7 +45,7 @@
         - vhost
         - template
 
-    - name: "vhost absence"
+    - name: Vhost absence
       ansible.builtin.file:
         path: "/etc/nginx/sites-available/{{ item.name }}"
         state: absent
@@ -55,14 +58,14 @@
         - vhost
         - template
 
-    - name: "link presence"
+    - name: Link presence
       ansible.builtin.file:
         src: "../sites-available/{{ item.name }}"
         path:
           "/etc/nginx/sites-enabled/{{ item.index |
           default('') }}{{ item.name }}"
         state: link
-      notify: reload nginx
+      notify: Reload nginx
       loop: "{{ nginx_sites }}"
       when:
         - not ansible_check_mode
@@ -75,13 +78,13 @@
         - vhost
         - link
 
-    - name: "link absence"
+    - name: Link absence
       ansible.builtin.file:
         path:
           "/etc/nginx/sites-enabled/{{ item.index |
           default('') }}{{ item.name }}"
         state: absent
-      notify: reload nginx
+      notify: Reload nginx
       loop: "{{ nginx_sites }}"
       when:
         - item.enabled is defined
@@ -90,7 +93,3 @@
         - nginx
         - vhost
         - link
-
-  become: true
-  when:
-    - "'nginx.service' in services"
