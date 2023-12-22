@@ -11,7 +11,10 @@
 # nginx_config_templates: files to drop into /etc/nginx/conf.d from templates.
 # See example template in templates folder
 # nginx_config_templates:
-#   - security.conf
+#   - name: headers.conf
+#     state: absent
+#   - name: security.conf
+#     state: present
 
 # nginx_server_tokens: example var used in nginx-security.conf.j2 template
 # nginx_server_tokens: "off"
