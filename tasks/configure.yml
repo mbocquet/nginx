@@ -1,5 +1,5 @@
 ---
-- name: openssl_dhparam
+- name: OpenSSL dhparam
   community.crypto.openssl_dhparam:
     path: "{{ nginx_dhparam_file }}"
     size: "{{ nginx_dhparam.bits | default(omit) }}"
@@ -11,16 +11,33 @@
     - ssl
     - dhparam
 
-# deploy conf.d/* files from templates and vars
-- name: conf.d
+- name: Conf.d presence
   ansible.builtin.template:
-    src: "nginx-{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ item }}"
+    src: "nginx-{{ item.name }}.j2"
+    dest: "/etc/nginx/conf.d/{{ item.name }}"
     mode: 0644
   become: true
   loop: "{{ nginx_config_templates }}"
-  notify: reload nginx
-  when: nginx_config_templates is defined
+  notify: Reload nginx
+  when:
+    - nginx_config_templates is defined
+    - item.state is not defined
+      or item.state|lower == "present"
+  tags:
+    - nginx
+    - config
+    - conf.d
+
+- name: Conf.d absence
+  ansible.builtin.file:
+    path: "/etc/nginx/conf.d/{{ item.name }}"
+    state: absent
+  loop: "{{ nginx_config_templates }}"
+  notify: Reload nginx
+  when:
+    - nginx_config_templates is defined
+    - item.state is defined
+    - item.state|lower == "absent"
   tags:
     - nginx
     - config
