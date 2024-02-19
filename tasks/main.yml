@@ -3,7 +3,19 @@
 - name: Package
   ansible.builtin.package:
     name: "{{ nginx_packages | default('nginx') }}"
+    update_cache: true
   become: true
+  tags:
+    - nginx
+    - package
+
+- name: Package
+  package:
+    name: python3-certbot-nginx
+    update_cache: true
+  when:
+    - nginx_sites is defined
+    - nginx_sites is search ("certname")
   tags:
     - nginx
     - package
