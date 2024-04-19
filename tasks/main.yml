@@ -64,7 +64,7 @@
       loop: "{{ nginx_sites }}"
       when:
         - item.available is defined
-        - item.available|lower in ['no', 'false']
+        - not item.available
       tags:
         - nginx
         - vhost
@@ -82,9 +82,9 @@
       when:
         - not ansible_check_mode
         - item.available is not defined
-          or item.available|lower in ['yes', 'true']
+          or item.available
         - item.enabled is not defined
-          or item.enabled|lower in ['yes', 'true']
+          or item.enabled
       tags:
         - nginx
         - vhost
