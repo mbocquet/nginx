@@ -100,7 +100,7 @@
       loop: "{{ nginx_sites }}"
       when:
         ( item.enabled is defined and not item.enabled )
-        or ( item.available is defined and item.available )
+        or ( item.available is defined and not item.available )
       tags:
         - nginx
         - vhost
