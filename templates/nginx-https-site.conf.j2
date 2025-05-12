@@ -1,4 +1,4 @@
-# {{ ansible_managed }}. role: {{ role_name }}, template: nginx-https-site.conf.j2
+# Ansible managed. role: {{ role_name }}, template: nginx-https-site.conf.j2
 
 server {
     listen {{ item.exposed_port | default(80) }};
