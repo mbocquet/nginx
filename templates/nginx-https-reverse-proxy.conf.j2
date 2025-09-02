@@ -16,8 +16,9 @@ server {
 
 server {
     server_name {{ item.servername }};
-    listen {{ item.exposed_port | default(443) }} ssl http2;
-    listen [::]:{{ item.exposed_port | default(443) }} ssl http2;
+    listen {{ item.exposed_port | default(443) }} ssl;
+    listen [::]:{{ item.exposed_port | default(443) }} ssl;
+    http2 on;
 
     ssl_certificate /etc/letsencrypt/live/{{ item.certname }}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/{{ item.certname }}/privkey.pem;
